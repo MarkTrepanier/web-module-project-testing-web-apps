@@ -15,7 +15,12 @@ test('renders the contact form header', ()=> {
 });
 
 test('renders ONE error message if user enters less then 5 characters into firstname.', async () => {
-    throw new Error('not yet tested')
+    const contactForm = render(<ContactForm/>);
+    const fnInput = screen.getByLabelText(/first name/i);
+    userEvent.type(fnInput,'foo');
+    const fnErr = await screen.findByText(/error: /i);
+    expect(fnErr).toBeVisible();
+
 });
 
 test('renders THREE error messages if user enters no values into any fields.', async () => {
