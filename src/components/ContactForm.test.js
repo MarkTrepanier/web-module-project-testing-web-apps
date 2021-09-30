@@ -24,11 +24,34 @@ test('renders ONE error message if user enters less then 5 characters into first
 });
 
 test('renders THREE error messages if user enters no values into any fields.', async () => {
-    throw new Error('not yet tested')
+    const contactForm = render(<ContactForm/>);
+    //our inputs: first name, last name, email
+    const fnInput = screen.getByLabelText(/first name/i);
+    const lnInput = screen.getByLabelText(/last name/i);
+    const emInput = screen.getByLabelText(/email/i);
+    userEvent.type(fnInput,'foo');
+    userEvent.type(fnInput,'');
+    userEvent.type(lnInput,'bar');
+    userEvent.type(lnInput,'');
+    userEvent.type(emInput,'fBar@fbEmail.com');
+    userEvent.type(emInput,'');
+    const errors = await screen.findAllByText(/error: /i,waitFor);
+    expect(errors.length).toBe(3);
+    console.log('below');
+    console.log(errors);
+    //todo
 });
 
 test('renders ONE error message if user enters a valid first name and last name but no email.', async () => {
-    throw new Error('not yet tested')
+    const contactForm = render(<ContactForm/>);
+    const fnInput = screen.getByLabelText(/first name/i);
+    const lnInput = screen.getByLabelText(/last name/i);
+    const emInput = screen.getByLabelText(/email/i);
+    userEvent.type(fnInput,'fooderick');
+    userEvent.type(lnInput,'Baronson');
+    const errors = await screen.findAllByText(/error: /i);
+    expect(errors).toHaveLength(1);
+
 });
 
 test('renders "email must be a valid email address" if an invalid email is entered', async () => {
